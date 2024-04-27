@@ -17,13 +17,13 @@ public class SearchResult {
     private String video_id;
     private String watch_url;
     private String embed_url;
+    private String thumbnail_url;
     private StreamMonostate stream_monostate;
     private String _author;
     private String _title;
     private Object _publish_date;
     private boolean use_oauth;
     private boolean allow_oauth_cache;
-    private String thumbnail_url;
     private String length;
 
 

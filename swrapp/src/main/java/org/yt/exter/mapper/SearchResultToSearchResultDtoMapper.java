@@ -31,4 +31,10 @@ public interface SearchResultToSearchResultDtoMapper {
     @Mapping(target = "length", source = "length")
     @Mapping(target = "thumbnailUrl", source = "thumbnail_url")
     SearchResultEntity toEntity(SearchResult searchResult);
+
+    List<SearchResultDto> fromEntities(List<SearchResultEntity> searchResultEntity);
+
+    SearchResultDto fromEntity(SearchResultEntity searchResultEntity);
+
+    List<SearchResult> toResult(List<SearchResultEntity> searchResults);
 }

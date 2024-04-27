@@ -3,6 +3,8 @@ from pydantic import BaseModel
 from pytube import Search, YouTube
 from fastapi.middleware.cors import CORSMiddleware
 
+import ytmusicapi
+
 origins = [
     "http://localhost.tiangolo.com",
     "https://localhost.tiangolo.com",
