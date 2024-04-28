@@ -1,0 +1,24 @@
+@if(searchResults().state === DataStateEnum.INIT){
+<div class="text-center mt-3" role="alert">
+  Please enter a search term to begin
+</div>
+}
+@else if (searchResults().state === DataStateEnum.LOADING) {
+<h1>Loading...</h1>
+}
+@else if(searchResults().state === DataStateEnum.LOADED){
+@for (item of searchResults().data; track $index) {
+<app-search-result [result]="item"></app-search-result>
+}
+}
+@else if (searchResults().state === DataStateEnum.ERROR) {
+<div class="alert alert-danger" role="alert">
+  An error occurred while loading the search results
+</div>
+}
+<!-- <ng-container *ngIf="searchResults$ | async as searchResults">
+  <ng-container *ngFor="let result of searchResults">
+    <app-search-result [result]="result"></app-search-result>
+  </ng-container>
+
+</ng-container> -->

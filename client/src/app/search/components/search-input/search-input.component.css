@@ -1,0 +1,21 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.search-form {
+  display: flex;
+  width: 100%;
+  align-content: center;
+  justify-content: center;
+  padding: 1rem;
+  gap: .5rem;
+
+}
+
+.search-form > input {
+  padding: .5rem 1rem;
+  border: none;
+  outline: none;
+  border-radius: .5rem;
+}

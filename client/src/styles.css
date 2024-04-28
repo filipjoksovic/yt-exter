@@ -1,0 +1,98 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif !important;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-variation-settings:
+    "slnt" 0;
+  font-size: 1rem;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  /* background: url("assets/blob-scene-haikei.svg") no-repeat center center fixed; */
+  background-size: cover;
+}
+
+app-search-results {
+  display: block;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: .5rem;
+  padding: .5rem;
+}
+
+app-search-result {
+  flex: 1;
+  flex-grow: 1;
+}
+
+.search-result {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  background-color: rgba(244, 240, 255, 0.7);
+  backdrop-filter: blur(30px);
+  border-radius: 1rem;
+  margin-bottom: .5rem;
+  border: 2px solid #79718f;
+  padding: 1rem;
+  gap: 1rem;
+
+}
+
+.search-result__thumbnail {
+  width: 210px;
+  height: 105px;
+  object-fit: cover;
+}
+
+.search-result__author {
+  font-size: smaller;
+  font-weight: bold;
+  color: #79718f;
+}
+
+.search-result__title {
+  font-size: larger;
+  font-weight: bold;
+}
+
+.search-result__watch {
+  background-color: #7543ff;
+  border: 2px solid #79718f;
+  border-radius: 1rem;
+  padding: .5rem;
+  color: #79718f;
+  font-weight: bold;
+  cursor: pointer;
+  color: white;
+}
+
+.search-result__data {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+.video-player {
+  width: 100%;
+  height: 50vh !important;
+}
+
+app-search-input {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}

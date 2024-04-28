@@ -1,0 +1,3 @@
+<ng-container *ngIf="activeStream$ | async as activeStream">
+  <iframe [src]="activeStream | safeUrl" class="video-player"></iframe>
+</ng-container>
