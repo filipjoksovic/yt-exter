@@ -17,7 +17,7 @@ export class WebsocketService {
 
   constructor() {
     this.websocket = new WebSocket('ws://localhost:8080/player/client');
-
+    
     this.websocket.onopen = (e) => {
       console.log("[open] Connection established");
       this._open$.next();

@@ -11,7 +11,7 @@ import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.yt.exter.entity.SearchResultEntity;
-import org.yt.exter.mapper.SearchResultToSearchResultDtoMapper;
+import org.yt.exter.mapper.SearchResultMapper;
 import org.yt.exter.model.SearchResult;
 import org.yt.exter.model.dto.SearchResultDto;
 
@@ -24,7 +24,7 @@ public class SearchResultDao {
     EntityManager entityManager;
 
     @Inject
-    SearchResultToSearchResultDtoMapper searchResultToSearchResultDtoMapper;
+    SearchResultMapper searchResultToSearchResultDtoMapper;
 
     @Transactional
     public SearchResultEntity save(SearchResult searchResult) {

@@ -1,6 +1,5 @@
 package org.yt.exter.resource;
 
-import io.smallrye.mutiny.Uni;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Path;
 import lombok.extern.slf4j.Slf4j;
@@ -8,10 +7,12 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.yt.exter.client.SearchClient;
 import org.yt.exter.api.SearchResource;
 import org.yt.exter.dao.SearchResultDao;
-import org.yt.exter.entity.SearchResultEntity;
-import org.yt.exter.mapper.SearchResultToSearchResultDtoMapper;
+import org.yt.exter.mapper.SearchResultMapper;
 import org.yt.exter.model.ResourceDetails;
 import org.yt.exter.model.SearchResult;
+import org.yt.exter.model.VideoDetails;
+import org.yt.exter.model.VideoDetailsRequest;
+import org.yt.exter.model.dto.SearchResultBaseDto;
 import org.yt.exter.model.dto.SearchResultDto;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public class SearchResourceImpl implements SearchResource {
     SearchClient searchClient;
 
     @Inject
-    SearchResultToSearchResultDtoMapper searchResultToSearchResultDtoMapper;
+    SearchResultMapper searchResultMapper;
 
     @Inject
     SearchResultDao searchResultDao;
@@ -37,7 +38,12 @@ public class SearchResourceImpl implements SearchResource {
         List<SearchResult> searchResults = searchClient.search(query);
         searchResultDao.saveAllAsync(searchResults);
         log.info("Search results: {}", searchResults);
-        return searchResultToSearchResultDtoMapper.toDtos(searchClient.search(query));
+        return searchResultMapper.toDtos(searchClient.search(query));
+    }
+
+    @Override
+    public List<SearchResultBaseDto> searchMinified(String query) {
+        return searchResultMapper.toBaseDtos(searchClient.searchMinified(query));
     }
 
     @Override
@@ -45,8 +51,9 @@ public class SearchResourceImpl implements SearchResource {
         return List.of();
     }
 
+    //TODO convert to DTO at some point
     @Override
-    public ResourceDetails details(String id) {
-        return null;
+    public VideoDetails details(VideoDetailsRequest request) {
+        return searchClient.details(request);
     }
 }

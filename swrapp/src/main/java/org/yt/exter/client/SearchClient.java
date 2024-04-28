@@ -3,8 +3,7 @@ package org.yt.exter.client;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
-import org.yt.exter.model.ResourceDetails;
-import org.yt.exter.model.SearchResult;
+import org.yt.exter.model.*;
 
 import java.util.List;
 
@@ -17,11 +16,15 @@ public interface SearchClient {
     List<SearchResult> search(@QueryParam("term") String query);
 
     @GET
+    @Path("/search/minified")
+    List<SearchResultBase> searchMinified(@QueryParam("term") String query);
+
+    @GET
     @Path("/next")
     List<SearchResult> next(String query);
 
-    @GET
-    @Path("/details/{id}")
-    ResourceDetails details(@PathParam("id") String id);
+    @POST
+    @Path("/details")
+    VideoDetails details(VideoDetailsRequest request);
 }
 

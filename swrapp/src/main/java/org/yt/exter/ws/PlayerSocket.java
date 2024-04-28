@@ -17,9 +17,9 @@ public class PlayerSocket {
     Map<String, Session> sessions = new java.util.concurrent.ConcurrentHashMap<>();
 
     @OnOpen
-    public void onOpen(Session session) {
-        broadcast("New user connected: " + session.getId());
-        sessions.put(session.getId(), session);
+    public void onOpen(Session session, @PathParam("username") String username) {
+//        broadcast("New user connected: " + session.getId());
+        sessions.put(username, session);
     }
 
     private void broadcast(String message) {
