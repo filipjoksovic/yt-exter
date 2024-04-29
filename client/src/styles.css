@@ -17,8 +17,6 @@
 }
 
 body {
-  width: 100vw;
-  height: 100vh;
   /* background: url("assets/blob-scene-haikei.svg") no-repeat center center fixed; */
   background-size: cover;
 }

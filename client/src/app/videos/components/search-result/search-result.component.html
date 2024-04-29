@@ -1,13 +1,24 @@
 <div class="flex gap-2 flex-wrap columns-2 p-2 bg-slate-50 rounded-md  border-2 border-slate-200 shadow-md">
   @if (result.thumbnail) {
   <div class="w-full relative">
-    <img [src]="result.thumbnail.thumbnails[0].url || ''| safeUrl"
-      class="w-full h-full object-fit-cover max-h-44" />
+    <img [src]="result.thumbnail.thumbnails[0].url || ''| safeUrl" class="w-full h-full object-fit-cover max-h-44" />
 
     <button (click)="watchSuggestion(result.embedUrl)"
       class="absolute bottom-1 right-1 bg-indigo-500 rounded-full p-3 text-center text-white">
       <img src="assets/icons/play.svg" class="w-6 h-6">
     </button>
+
+    <div class="absolute bottom-1 left-1">
+      @if (result.lengthSeconds) {
+      <p class="text-slate-900 bg-slate-200 w-fit rounded-full px-4 py-1 text-sm">{{result.lengthSeconds || 0 |
+        formatSeconds}}</p>
+      }
+      @else {
+      <div class="animate-pulse rounded-full text-slate-200 bg-slate-200 px-3 py-2 w-fit">
+        <p>00:00</p>
+      </div>
+      }
+    </div>
 
   </div>
   }
@@ -24,7 +35,7 @@
   <div class="h-100 w-100">
     <div class="flex flex-col gap-1">
       @if(result.title){
-      <p class="w-fit text-xl text-slate-900 bg-slate-200 rounded-full px-3 py-2">{{ result.title
+      <p class="w-fit text-slate-900 bg-slate-200 rounded-full px-3 py-2 nowrap overflow-ellipsis">{{ result.title
         }}</p>
       }
       @else {
@@ -41,24 +52,6 @@
       @else {
       <div class="animate-pulse rounded-full w-fit text-sm text-slate-200 bg-slate-200  px-3 py-2 ">
         <p class=" ">Dummy author</p>
-      </div>
-      }
-
-      @if(result.viewCount){
-      <p class="text-slate-900  w-fit bg-slate-200 rounded-full px-3 py-2">{{result.viewCount}}</p>
-      }
-      @else {
-      <div class="animate-pulse rounded-full text-slate-200 bg-slate-200 px-3 py-2 w-fit">
-        <p class="">123456789</p>
-      </div>
-      }
-      @if (result.lengthSeconds) {
-      <p class="text-slate-900 bg-slate-200 w-fit rounded-full px-3 py-2">{{result.lengthSeconds || 0 |
-        formatSeconds}}</p>
-      }
-      @else {
-      <div class="animate-pulse rounded-full text-slate-200 bg-slate-200 px-3 py-2 w-fit">
-        <p>00:00</p>
       </div>
       }
     </div>

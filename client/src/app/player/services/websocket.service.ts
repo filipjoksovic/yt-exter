@@ -1,5 +1,5 @@
-import {Injectable} from '@angular/core';
-import {Subject} from "rxjs";
+import { Injectable } from '@angular/core';
+import { Subject } from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -16,19 +16,25 @@ export class WebsocketService {
   public close$ = this._close$.asObservable();
 
   constructor() {
-    this.websocket = new WebSocket('ws://192.168.1.125:8080/player/app');
+    this.websocket = this.initializeWebsocket();
 
-    this.websocket.onopen = (e) => {
+
+  }
+
+  initializeWebsocket() {
+    const socket = new WebSocket('ws://localhost:8080/player/app');
+
+    socket.onopen = (e) => {
       console.log("[open] Connection established");
       this._open$.next();
     };
 
-    this.websocket.onmessage = (event) => {
+    socket.onmessage = (event) => {
       console.log(`[message] Data received from server: ${event.data}`);
       this._message$.next(event.data);
     };
 
-    this.websocket.onclose = (event) => {
+    socket.onclose = (event) => {
       if (event.wasClean) {
         console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
       } else {
@@ -37,11 +43,13 @@ export class WebsocketService {
         console.log('[close] Connection died');
       }
       this._close$.next();
+      this.initializeWebsocket();
     };
 
-    this.websocket.onerror = function (error) {
+    socket.onerror = function (error) {
       console.log(`[error]`, error);
     };
+    return socket;
   }
 
   sendWatchMessage(embed_url: string) {

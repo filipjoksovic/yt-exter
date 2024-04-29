@@ -5,13 +5,15 @@ import { SafeUrlPipe } from "../../pipes/safe-url.pipe";
 import { SearchService } from '../../../search/services/search.service';
 import { FormatSecondsPipe } from '../../pipes/format-seconds.pipe';
 import { Thumbnail } from '../../../search/models/thumbnail.model';
+import { SlicePipe } from '@angular/common';
 
 @Component({
   selector: 'app-search-result',
   standalone: true,
   imports: [
     SafeUrlPipe,
-    FormatSecondsPipe
+    FormatSecondsPipe,
+    SlicePipe
   ],
   templateUrl: './search-result.component.html',
   styleUrl: './search-result.component.css'
@@ -23,7 +25,7 @@ export class SearchResultComponent {
   set result(value: SearchResultModel) {
     this.searchService.getVideoDetails(value?.watchUrl || '').subscribe({
       next: (result) => {
-        this._result = {...result, ...this._result};
+        this._result = { ...result, ...this._result };
         console.log(this._result);
       },
       error: (error) => {
@@ -32,7 +34,7 @@ export class SearchResultComponent {
     });
     this._result = value;
   }
-  get result() :SearchResultModel{
+  get result(): SearchResultModel {
     return this._result;
   }
 
