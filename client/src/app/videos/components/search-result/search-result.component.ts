@@ -42,6 +42,7 @@ export class SearchResultComponent {
 
   watchSuggestion(embed_url: string) {
     this.playerService.sendWatchMessage(embed_url);
+    this.playerService.setActiveVideo(this.result);
 
   }
 }

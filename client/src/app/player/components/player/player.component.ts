@@ -5,6 +5,7 @@ import {PlayerService} from "../../services/player.service";
 import {SafeUrlPipe} from "../../../videos/pipes/safe-url.pipe";
 import {WebsocketHandlerService} from "../../../core/services/websocket-handler.service";
 import {SocketMessage} from "../../../models/core/socket-message.model";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-player',
@@ -20,7 +21,9 @@ import {SocketMessage} from "../../../models/core/socket-message.model";
 })
 export class PlayerComponent implements OnInit {
 
-  constructor(private readonly playerService: PlayerService, private readonly websocketHandlerService: WebsocketHandlerService) {
+  activeVideo = this.playerService.activeVideo;
+
+  constructor(private readonly playerService: PlayerService, private readonly websocketHandlerService: WebsocketHandlerService, private readonly router: Router) {
   }
 
   ngOnInit() {
@@ -29,4 +32,7 @@ export class PlayerComponent implements OnInit {
     // });
   }
 
+  goToPlayerPage() {
+    this.router.navigate(["/player"]);
+  }
 }
