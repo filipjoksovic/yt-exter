@@ -1,3 +1,21 @@
-<ng-container *ngIf="activeStream$ | async as activeStream">
-  <iframe [src]="activeStream | safeUrl" class="video-player"></iframe>
-</ng-container>
+<div class="p-3 bg-slate-900 text-white flex gap-4 items-center justify-between">
+  <div class="w-8 h-8">
+    <img src="https://via.placeholder.com/150" alt="player" class="w-full h-full object-cover rounded-full">
+  </div>
+  <div class = "flex flex-col gap-2">
+    <span class = "text-sm">{{'Skakavacc desingerica very very long title ' | slice:0:35 }}...</span>
+    <span class = "text-sm">Desingerica</span>
+  </div>
+  <div class = "flex nowrap gap-3">
+    <!-- <button class="text-white">
+      <i class="fas fa-step-backward"></i>
+    </button> -->
+    <button class="text-white bg-sky-500 p-2 rounded-full w-8 h-8 flex items-center justify-center">
+      <i class="fas fa-play"></i>
+    </button>
+    <!-- <button class="text-white">
+      <i class="fas fa-step-forward"></i>
+    </button> -->
+  </div>
+
+</div>

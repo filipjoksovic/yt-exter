@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from "rxjs";
+import { SocketMessage } from '../model/socket-message.model';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ export class WebsocketService {
 
   private _open$ = new Subject<void>();
   public open$ = this._open$.asObservable();
-  private _message$ = new Subject<string>();
+  private _message$ = new Subject<SocketMessage>();
   public message$ = this._message$.asObservable();
   private _close$ = new Subject<void>();
   public close$ = this._close$.asObservable();
@@ -22,7 +23,7 @@ export class WebsocketService {
   }
 
   initializeWebsocket() {
-    const socket = new WebSocket('ws://localhost:8080/player/client');
+    const socket = new WebSocket('ws://192.168.1.125:8080/player/client');
 
     socket.onopen = (e) => {
       console.log("[open] Connection established");
@@ -30,8 +31,9 @@ export class WebsocketService {
     };
 
     socket.onmessage = (event) => {
+      const parsedMessage = this.parseMessage(event.data);
       console.log(`[message] Data received from server: ${event.data}`);
-      this._message$.next(event.data);
+      this._message$.next(parsedMessage);
     };
 
     socket.onclose = (event) => {
@@ -50,5 +52,14 @@ export class WebsocketService {
       console.log(`[error]`, error);
     };
     return socket;
+  }
+
+  public parseMessage(message: string): SocketMessage {
+    try {
+      return JSON.parse(message) as SocketMessage;
+    } catch (e) {
+      console.error("Error parsing message", message);
+      throw e;
+    }
   }
 }

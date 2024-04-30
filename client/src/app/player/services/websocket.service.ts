@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from "rxjs";
+import { SocketMessage, SocketMessageType } from '../../models/core/socket-message.model';
 
 @Injectable({
   providedIn: 'root'
@@ -10,19 +11,22 @@ export class WebsocketService {
 
   private _open$ = new Subject<void>();
   public open$ = this._open$.asObservable();
+
   private _message$ = new Subject<string>();
   public message$ = this._message$.asObservable();
+
   private _close$ = new Subject<void>();
   public close$ = this._close$.asObservable();
 
+  private _nowPlaying$ = new Subject<string>();
+  private nowPlaying$ = this._nowPlaying$.asObservable();
+
   constructor() {
     this.websocket = this.initializeWebsocket();
-
-
   }
 
   initializeWebsocket() {
-    const socket = new WebSocket('ws://localhost:8080/player/app');
+    const socket = new WebSocket('ws://192.168.1.125:8080/player/app');
 
     socket.onopen = (e) => {
       console.log("[open] Connection established");
@@ -53,6 +57,16 @@ export class WebsocketService {
   }
 
   sendWatchMessage(embed_url: string) {
-    this.websocket.send(embed_url);
+    this.sendSocketMessage({ type: SocketMessageType.PLAY, content: embed_url });
+  }
+
+  getNowPlaying() {
+    this.sendSocketMessage({
+      type: SocketMessageType.NOW_PLAYING
+    });
+  }
+
+  public sendSocketMessage(message: SocketMessage) {
+    this.websocket.send(JSON.stringify(message));
   }
 }
