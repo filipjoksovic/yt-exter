@@ -1,3 +1,5 @@
 <app-search-input></app-search-input>
 <app-search-results></app-search-results>
-<app-player class = "fixed bottom-0"></app-player>
+@if (playConfirmed()) {
+  <app-player class="fixed bottom-0"></app-player>
+}

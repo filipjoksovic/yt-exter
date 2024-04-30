@@ -29,14 +29,11 @@ export class SearchInputComponent implements OnInit {
   }
 
   searchForVideo() {
-    console.log("Searching for a video");
     this.searchService.searchForVideoMin(this.searchForm.controls.searchInput.value).subscribe({
       next: (result) => {
-        console.log("Result: ", result);
       },
       error: (error) => {
         console.error("Error: ", error);
-        alert("Error: " + JSON.stringify(error));
       }
     });
   }

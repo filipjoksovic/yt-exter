@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { Subject } from "rxjs";
-import { SocketMessage } from '../model/socket-message.model';
+import {Injectable} from '@angular/core';
+import {Subject} from "rxjs";
+import {SocketMessage, SocketMessageType} from '../model/socket-message.model';
 
 @Injectable({
   providedIn: 'root'
@@ -61,5 +61,14 @@ export class WebsocketService {
       console.error("Error parsing message", message);
       throw e;
     }
+  }
+
+  sendPlayConfirmMessage(embedUrl: string) {
+    this.sendMessage({type: SocketMessageType.PLAY_CONFIRM, content: embedUrl});
+
+  }
+
+  sendMessage(message: SocketMessage) {
+    this.websocket.send(JSON.stringify(message));
   }
 }

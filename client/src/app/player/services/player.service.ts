@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from "rxjs";
-import {WebsocketService} from "./websocket.service";
+import {WebsocketService} from "../../core/services/websocket.service";
 import {PlayerApiService} from "./api/player.api.service";
 
 @Injectable({

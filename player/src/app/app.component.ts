@@ -1,10 +1,11 @@
-import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { WebsocketService } from "./services/websocket.service";
-import { SafePipe } from "./pipes/safe.pipe";
-import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
-import { log } from "@angular-devkit/build-angular/src/builders/ssr-dev-server";
-import { SocketMessageType } from './model/socket-message.model';
+import {Component, ElementRef, inject, OnInit, ViewChild} from '@angular/core';
+import {RouterOutlet} from '@angular/router';
+import {WebsocketService} from "./services/websocket.service";
+import {SafePipe} from "./pipes/safe.pipe";
+import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
+import {log} from "@angular-devkit/build-angular/src/builders/ssr-dev-server";
+import {SocketMessageType} from './model/socket-message.model';
+import {timeout} from "rxjs";
 
 @Component({
   selector: 'app-root',
@@ -20,6 +21,7 @@ export class AppComponent implements OnInit {
 
   websocketService = inject(WebsocketService);
   sanitizer = inject(DomSanitizer);
+  private rawEmbedUrl!: string;
   embedUrl!: SafeResourceUrl;
 
 
@@ -41,9 +43,11 @@ export class AppComponent implements OnInit {
 
     });
   }
+
   stopVideo() {
     throw new Error('Method not implemented.');
   }
+
   pauseVideo() {
     throw new Error('Method not implemented.');
   }
@@ -54,17 +58,12 @@ export class AppComponent implements OnInit {
       console.error("Invalid URL");
       return;
     }
+    this.rawEmbedUrl = embedUrl;
     this.embedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(embedUrl + "?autoplay=1");
-    setTimeout(() => {
-      const event = new MouseEvent("click", {
-        view: window,
-        bubbles: true,
-        cancelable: true
-      })
-
-      this.iframe.nativeElement.querySelector(".ytp-large-play-button").dispatchEvent(event);
-      console.log("Clicked")
-    }, 5000)
+    this.websocketService.sendPlayConfirmMessage(this.rawEmbedUrl);
   }
 
+  notifyLoadSuccess() {
+    console.log("Notifying server of load success");
+  }
 }

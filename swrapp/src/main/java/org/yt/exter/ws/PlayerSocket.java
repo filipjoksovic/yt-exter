@@ -10,10 +10,10 @@ import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yt.exter.PlayerSocketHandler;
 import org.yt.exter.api.NowPlayingResource;
 import org.yt.exter.model.PlayerMessage;
-import org.yt.exter.model.enums.MessageType;
-import org.yt.exter.resource.NowPlayingResourceImpl;
+import org.yt.exter.model.enums.ServerMessageType;
 
 import java.util.Map;
 
@@ -27,6 +27,9 @@ public class PlayerSocket {
     @Inject
     NowPlayingResource nowPlayingResource;
 
+    @Inject
+    PlayerSocketHandler playerSocketHandler;
+
     @OnOpen
     public void onOpen(Session session, @PathParam("username") String username) {
 //        broadcast("New user connected: " + session.getId());
@@ -34,16 +37,6 @@ public class PlayerSocket {
     }
 
     private void broadcast(String message) {
-        sessions.values().forEach(s -> {
-            s.getAsyncRemote().sendObject(message, result -> {
-                if (result.getException() != null) {
-                    System.out.println("Unable to send message: " + result.getException());
-                }
-            });
-        });
-    }
-
-    private void broadcast(PlayerMessage message) {
         sessions.values().forEach(s -> {
             s.getAsyncRemote().sendObject(message, result -> {
                 if (result.getException() != null) {
@@ -67,67 +60,7 @@ public class PlayerSocket {
 
     @OnMessage
     public void onMessage(String message, @PathParam("username") String username) {
-        ObjectMapper mapper = new ObjectMapper();
-        log.info("Received message: {} from {}", message, username);
-        PlayerMessage parsedMessage;
-        try {
-            parsedMessage = mapper.readValue(message, PlayerMessage.class);
-//            sendMessage(parsedMessage, sessions.getOrDefault(parsedMessage.getTo(), sessions.get("client")));
-            handleMessage(username, parsedMessage);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
-    private void handleMessage(String username, PlayerMessage message) {
-        switch (message.getType()) {
-            case MessageType.Fields.PLAY:
-                // play
-                notifyPlayer(message);
-                break;
-            case MessageType.Fields.PAUSE:
-                // pause
-                break;
-            case MessageType.Fields.NEXT:
-                // next
-                break;
-            case MessageType.Fields.GET_NOW_PLAYING:
-                // get now playing
-                handleGetNowPlaying(username);
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown message type: " + message.getType());
-        }
-    }
-
-    private void handleGetNowPlaying(String username) {
-    }
-
-    private void notifyPlayer(PlayerMessage message) {
-        if (!sessions.containsKey("client")) {
-            log.error("Player client not online");
-            return;
-        }
-
-        sendMessage(message, sessions.get("client"));
-        nowPlayingResource.nowPlaying(message.getContent());
-    }
-
-
-    private void sendMessage(PlayerMessage message, Session client) {
-        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        try {
-            String json = ow.writeValueAsString(message);
-            client.getAsyncRemote().sendObject(json, result -> {
-                if (result.getException() != null) {
-                    log.error("Unable to send message: " + result.getException());
-                } else {
-                    log.info("Message sent successfully");
-                }
-            });
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-
+        playerSocketHandler.handleMessage(sessions, username, message);
     }
 }

@@ -2,10 +2,11 @@ package org.yt.exter.model.enums;
 
 import lombok.experimental.FieldNameConstants;
 
+/**
+ * Enum for the different types of messages that can come from the server.
+ */
 @FieldNameConstants(onlyExplicitlyIncluded = true)
-public enum MessageType {
+public enum ServerMessageType {
     @FieldNameConstants.Include PLAY,
-    @FieldNameConstants.Include PAUSE,
-    @FieldNameConstants.Include NEXT,
-    @FieldNameConstants.Include GET_NOW_PLAYING;
+    @FieldNameConstants.Include PLAY_CONFIRMED;
 }

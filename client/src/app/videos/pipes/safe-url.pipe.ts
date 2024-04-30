@@ -11,7 +11,6 @@ export class SafeUrlPipe implements PipeTransform {
   }
 
   transform(url: string): SafeResourceUrl {
-    console.log(`url: ${url}`);
     if (!url) throw new Error("Value for provided URL is undefined!");
     return this.domSanitizer.bypassSecurityTrustResourceUrl(url);
   }

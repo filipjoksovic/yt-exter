@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { AsyncPipe, NgIf, SlicePipe } from "@angular/common";
-import { BehaviorSubject, Observable } from "rxjs";
-import { PlayerService } from "../../services/player.service";
-import { SafeUrlPipe } from "../../../videos/pipes/safe-url.pipe";
+import {Component, OnInit} from '@angular/core';
+import {AsyncPipe, NgIf, SlicePipe} from "@angular/common";
+import {BehaviorSubject, Observable} from "rxjs";
+import {PlayerService} from "../../services/player.service";
+import {SafeUrlPipe} from "../../../videos/pipes/safe-url.pipe";
+import {WebsocketHandlerService} from "../../../core/services/websocket-handler.service";
+import {SocketMessage} from "../../../models/core/socket-message.model";
 
 @Component({
   selector: 'app-player',
@@ -17,12 +19,14 @@ import { SafeUrlPipe } from "../../../videos/pipes/safe-url.pipe";
   styleUrl: './player.component.css'
 })
 export class PlayerComponent implements OnInit {
-  activeStream$!: Observable<string>;
 
-  constructor(private readonly playerService: PlayerService) {
+  constructor(private readonly playerService: PlayerService, private readonly websocketHandlerService: WebsocketHandlerService) {
   }
 
   ngOnInit() {
+    // this.websocketHandlerService.getNowPlayingMessage$.subscribe((data: SocketMessage) => {
+    //   console.log('play confirm message received', data);
+    // });
   }
 
 }

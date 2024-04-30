@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { Subject } from "rxjs";
-import { SocketMessage, SocketMessageType } from '../../models/core/socket-message.model';
+import {Injectable} from '@angular/core';
+import {Subject} from "rxjs";
+import {SocketMessage, SocketMessageType} from '../../models/core/socket-message.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +12,7 @@ export class WebsocketService {
   private _open$ = new Subject<void>();
   public open$ = this._open$.asObservable();
 
-  private _message$ = new Subject<string>();
+  private _message$ = new Subject<SocketMessage>();
   public message$ = this._message$.asObservable();
 
   private _close$ = new Subject<void>();
@@ -23,6 +23,11 @@ export class WebsocketService {
 
   constructor() {
     this.websocket = this.initializeWebsocket();
+
+    this.message$.subscribe((message) => {
+        console.log("Received message: ", message);
+      }
+    );
   }
 
   initializeWebsocket() {
@@ -33,9 +38,20 @@ export class WebsocketService {
       this._open$.next();
     };
 
+    function parseSocketMessage(data: string): SocketMessage {
+      try {
+        return JSON.parse(data) as SocketMessage;
+      } catch (e) {
+        console.error(`Failed to parse message: ${data}`);
+        throw e;
+      }
+
+    }
+
     socket.onmessage = (event) => {
       console.log(`[message] Data received from server: ${event.data}`);
-      this._message$.next(event.data);
+      const parsedMessage = parseSocketMessage(event.data);
+      this._message$.next(parsedMessage);
     };
 
     socket.onclose = (event) => {
@@ -57,7 +73,7 @@ export class WebsocketService {
   }
 
   sendWatchMessage(embed_url: string) {
-    this.sendSocketMessage({ type: SocketMessageType.PLAY, content: embed_url });
+    this.sendSocketMessage({type: SocketMessageType.PLAY, content: embed_url});
   }
 
   getNowPlaying() {
